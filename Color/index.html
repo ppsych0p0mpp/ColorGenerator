@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medieval Color Generator</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background-color 0.5s;
+        }
+        .frame {
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 5px solid #8B4513;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #8B4513;
+        }
+        .slider-container {
+            margin: 10px 0;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        button {
+            background-color: #8B4513;
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="frame">
+        <h1>Medieval Color Generator</h1>
+        <div class="slider-container">
+            <label for="primary">Primary:</label>
+            <input type="range" id="primary" min="0" max="255" value="0">
+            <span id="primaryValue"></span>
+        </div>
+        <div class="slider-container">
+            <label for="secondary">Secondary:</label>
+            <input type="range" id="secondary" min="0" max="255" value="0">
+            <span id="secondaryValue"></span>
+        </div>
+        <div class="slider-container">
+            <label for="tertiary">Tertiary:</label>
+            <input type="range" id="tertiary" min="0" max="255" value="0">
+            <span id="tertiaryValue"></span>
+        </div>
+        <p>Generated Color: <span id="hexCode"></span></p>
+        <button onclick="generateColor()">Generate Color</button>
+    </div>
+
+    <script>
+        function generateColor() {
+            const primary = Math.floor(Math.random() * 256);
+            const secondary = Math.floor(Math.random() * 256);
+            const tertiary = Math.floor(Math.random() * 256);
+
+            document.getElementById('primary').value = primary;
+            document.getElementById('secondary').value = secondary;
+            document.getElementById('tertiary').value = tertiary;
+
+            updateColor(primary, secondary, tertiary);
+        }
+
+        function updateColor(primary, secondary, tertiary) {
+            const hexCode = rgbToHex(primary, secondary, tertiary);
+            document.body.style.backgroundColor = hexCode;
+            document.getElementById('hexCode').textContent = hexCode;
+            document.getElementById('primaryValue').textContent = primary;
+            document.getElementById('secondaryValue').textContent = secondary;
+            document.getElementById('tertiaryValue').textContent = tertiary;
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
+
+        document.getElementById('primary').addEventListener('input', function() {
+            updateColor(this.value, document.getElementById('secondary').value, document.getElementById('tertiary').value);
+        });
+
+        document.getElementById('secondary').addEventListener('input', function() {
+            updateColor(document.getElementById('primary').value, this.value, document.getElementById('tertiary').value);
+        });
+
+        document.getElementById('tertiary').addEventListener('input', function() {
+            updateColor(document.getElementById('primary').value, document.getElementById('secondary').value, this.value);
+        });
+
+        generateColor();
+    </script>
+</body>
+</html>
